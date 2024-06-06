@@ -35,10 +35,10 @@ const Home = () => {
           ></Image>
         </div>
       </section>
-      <section className="flex items-center justify-around">
-        <div>
-          <Tabs defaultValue="Anime" className="w-[400px]">
-            <TabsList>
+      <section className="flex flex-col sm:flex-row items-center justify-between p-6">
+        <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0 w-full sm:w-auto">
+          <Tabs defaultValue="Anime" className="w-full sm:w-[400px]">
+            <TabsList className="flex">
               <TabsTrigger
                 value="Anime"
                 className="font-semibold focus:font-semibold"
@@ -52,14 +52,16 @@ const Home = () => {
                 Others
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="Card">
+            <TabsContent value="Anime">
               <Linkcard />
             </TabsContent>
+            <TabsContent value="Manga">Change your password here.</TabsContent>
+            <TabsContent value="Others">Other content here.</TabsContent>
           </Tabs>
         </div>
-        <div>
+        <div className="w-full sm:w-auto flex justify-center sm:justify-end">
           <Select>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Theme" />
             </SelectTrigger>
             <SelectContent>
