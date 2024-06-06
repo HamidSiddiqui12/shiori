@@ -3,7 +3,9 @@ import { UserInterface } from "../../../types";
 import { LoginRedirects } from "./LoginRedirects";
 
 export const Header = async ({ id }: { id: string | null }) => {
-  const user: UserInterface = await getUserById(id || "");
+  if (!id) return null;
+
+  const user: UserInterface = await getUserById(id as string);
 
   return (
     <header className="px-10 py-4">
