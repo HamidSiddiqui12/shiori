@@ -1,11 +1,4 @@
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import Linkcard from "../components/Linkcard";
@@ -55,21 +48,13 @@ const Home = () => {
             <TabsContent value="Anime">
               <Linkcard />
             </TabsContent>
-            <TabsContent value="Manga">Change your password here.</TabsContent>
-            <TabsContent value="Others">Other content here.</TabsContent>
+            <TabsContent value="Manga">
+              <Linkcard />
+            </TabsContent>
+            <TabsContent value="Others">
+              <Linkcard />
+            </TabsContent>
           </Tabs>
-        </div>
-        <div className="w-full sm:w-auto flex justify-center sm:justify-end">
-          <Select>
-            <SelectTrigger className="w-full sm:w-[180px]">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
       </section>
     </>
