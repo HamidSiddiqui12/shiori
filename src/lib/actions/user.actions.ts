@@ -125,3 +125,13 @@ export async function getSavedAnime(userId: string) {
     throw error;
   }
 }
+
+export async function deleteAnime(animeId: string) {
+  try {
+    await connectToDatabase();
+    await SavedAnime.deleteOne({ _id: animeId });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
