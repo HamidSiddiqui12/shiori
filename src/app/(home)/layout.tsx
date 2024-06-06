@@ -1,13 +1,18 @@
-import Header from "@/components/customs/header";
+import { Header } from "@/components/customs/header";
+import { cookies } from "next/headers";
 import React from "react";
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+export default function HomeLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const id = cookies().get("token")?.value || null;
+
   return (
-    <main className="flex flex-col w-full min-h-screen">
-      <Header />
-      <div className="flex flex-1 w-full">{children}</div>
+    <main>
+      <Header id={id} />
+      {children}
     </main>
   );
-};
-
-export default layout;
+}
