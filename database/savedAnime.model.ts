@@ -1,10 +1,7 @@
 import { Document, Schema, model, models } from "mongoose";
 
 export interface ISavedAnime extends Document {
-  title: string;
   description: string;
-  episodesWatched: number;
-  genre: string;
   animeImage: string;
   animeName: string;
   animeLink: string;
@@ -13,22 +10,11 @@ export interface ISavedAnime extends Document {
 }
 
 export const SavedAnimeSchema = new Schema<ISavedAnime>({
-  title: {
-    type: String,
-    required: true,
-  },
   description: {
     type: String,
     required: true,
   },
-  episodesWatched: {
-    type: Number,
-    required: true,
-  },
-  genre: {
-    type: String,
-    required: true,
-  },
+
   animeImage: {
     type: String,
     required: true,

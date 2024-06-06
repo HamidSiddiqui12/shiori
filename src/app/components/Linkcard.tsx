@@ -1,53 +1,66 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardDescription,
+  CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 
-const Linkcard = () => {
+import Image from "next/image";
+import Link from "next/link";
+
+const Linkcard = ({ data }: { data: string }) => {
+  const animeData = JSON.parse(data);
   return (
     <div className="container mx-auto py-10">
-      <Card className="max-w-sm mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-        <Image
-          className="w-full h-48 object-cover"
-          src=""
-          alt="Anime Image"
-        ></Image>
-        <CardHeader>
-          <CardTitle>Anime Name</CardTitle>
-          <CardDescription>
-            <div className="text-gray-700 mb-2">
+      {animeData.map((data: any) => (
+        <Card
+          key={data._id}
+          className="mx-auto max-w-sm overflow-hidden rounded-lg bg-white shadow-md"
+        >
+          <CardHeader>
+            <CardTitle>{data.animeName}</CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            <div className="mb-2 text-gray-700">
               <span className="font-semibold">Link: </span>
-              <a
-                href="/"
-                className="text-blue-500"
+              {/* <span>Watch Here</span> */}
+              <Link
+                href={data.animeLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="text-blue-500"
               >
                 Watch Here
-              </a>
+              </Link>
             </div>
-            <div className="text-gray-700 mb-2">
-              <span className="font-semibold">Status: </span>Watched
+            <div className="mb-2 text-gray-700">
+              <span className="font-semibold">Status: </span>
+              <span>{data.animeStatus}</span>
             </div>
-          </CardDescription>
-        </CardHeader>
-        {/* <CardContent>
-          <p>Additional content or description can go here.</p>
-        </CardContent> */}
-        <CardFooter className="flex justify-between">
-          <Button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-            Delete
-          </Button>
-          <Button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-            Edit
-          </Button>
-        </CardFooter>
-      </Card>
+            <Image
+              className="h-48 w-full object-cover"
+              src={data.animeImage}
+              alt="Anime Image"
+              width={500}
+              height={500}
+            />
+          </CardContent>
+
+          <CardFooter className="flex justify-between">
+            <Button className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600">
+              Delete
+            </Button>
+            <Button className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+              Edit
+            </Button>
+          </CardFooter>
+        </Card>
+      ))}
     </div>
   );
 };
