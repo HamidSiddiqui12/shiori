@@ -71,9 +71,6 @@ const Linkcard = () => {
               </div>
             </CardDescription>
           </CardHeader>
-          {/* <CardContent>
-            <p>Additional content or description can go here.</p>
-          </CardContent> */}
           <CardFooter className="flex justify-between">
             <Button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
               Delete
