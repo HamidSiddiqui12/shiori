@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { deleteAnime } from "@/lib/actions/user.actions";
-
 import Image from "next/image";
 import Link from "next/link";
 
