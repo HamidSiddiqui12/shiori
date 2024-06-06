@@ -134,7 +134,7 @@ function Register({ type }: { type: "login" | "register" }) {
 
             {error && (
               <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4 px-2" />
+                <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
