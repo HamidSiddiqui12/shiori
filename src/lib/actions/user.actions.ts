@@ -7,10 +7,13 @@ import { UserInterface } from "../../../types";
 import { connectToDatabase } from "../mongoose";
 import { CreateUserParams } from "./shared.types";
 
-export async function getUserById(id: string) {
+export async function getUserById(id: any) {
   try {
+    if (!id) throw new Error("ID not found");
     await connectToDatabase();
-    const user: UserInterface | null = await User.findById(id);
+    const user: UserInterface | null = await User.findById({
+      _id: JSON.parse(id),
+    });
     if (!user) {
       throw new Error("User not found");
     }
@@ -47,7 +50,7 @@ export async function loginUser(params: CreateUserParams) {
       throw new Error("User not found");
     }
     if (user.password === password) {
-      cookies().set("token", user?._id.toString());
+      cookies().set("token", JSON.stringify(user._id));
       return true;
     }
     throw new Error("User not found");

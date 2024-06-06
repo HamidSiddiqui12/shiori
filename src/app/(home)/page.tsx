@@ -8,7 +8,11 @@ import { Categories } from "../../components/customs/Categories";
 const Home = async () => {
   const id = cookies().get("token")?.value || null;
 
-  const user = await getUserById(id || "");
+  if (!id) {
+    redirect("/login");
+  }
+
+  const user = await getUserById(id as string);
 
   if (!user) {
     redirect("/login");
