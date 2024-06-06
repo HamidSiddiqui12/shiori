@@ -8,7 +8,7 @@ const Home = () => {
     <>
       <section className="container flex items-center justify-between">
         <div className="text-left">
-          <h1 className="text-4xl font-bold mb-4">
+          <h1 className="mb-4 text-4xl font-bold">
             Save, <span className="text-primary">Manage</span>, Visualize
           </h1>
           <p className="text-xl">
