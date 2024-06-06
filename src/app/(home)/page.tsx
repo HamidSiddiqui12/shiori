@@ -1,9 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AddAnime } from "@/components/AddAnime";
+import { getUserById } from "@/lib/actions/user.actions";
+import { cookies } from "next/headers";
 import Image from "next/image";
-import Linkcard from "../components/Linkcard";
+import { redirect } from "next/navigation";
+import { Categories } from "../../components/customs/Categories";
 
-const Home = () => {
+const Home = async () => {
+  const id = cookies().get("token")?.value || null;
+
+  const user = await getUserById(id || "");
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  console.log(user);
+
   return (
     <>
       <section className="container flex items-center justify-between">
@@ -17,7 +29,7 @@ const Home = () => {
               One Place<span className="text-primary">!</span>
             </span>
           </p>
-          <Button className="mt-8">Add Link</Button>
+          <AddAnime userId={user?._id.toString()} />
         </div>
         <div className="">
           <Image
@@ -28,35 +40,7 @@ const Home = () => {
           ></Image>
         </div>
       </section>
-      <section className="flex flex-col sm:flex-row items-center justify-between p-6">
-        <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0 w-full sm:w-auto">
-          <Tabs defaultValue="Anime" className="w-full sm:w-[400px]">
-            <TabsList className="flex">
-              <TabsTrigger
-                value="Anime"
-                className="font-semibold focus:font-semibold"
-              >
-                Anime
-              </TabsTrigger>
-              <TabsTrigger value="Manga" className="focus:font-semibold">
-                Manga
-              </TabsTrigger>
-              <TabsTrigger value="Others" className="focus:font-semibold">
-                Others
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="Anime">
-              <Linkcard />
-            </TabsContent>
-            <TabsContent value="Manga">
-              <Linkcard />
-            </TabsContent>
-            <TabsContent value="Others">
-              <Linkcard />
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
+      <Categories userId={user?._id.toString()} />
     </>
   );
 };
