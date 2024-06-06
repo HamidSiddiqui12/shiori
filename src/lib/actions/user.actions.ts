@@ -30,6 +30,12 @@ export async function createUser(params: CreateUserParams) {
     await connectToDatabase();
     const { username, password } = params;
 
+    const user = await User.findOne({ username });
+
+    if (user) {
+      throw new Error("User already exists");
+    }
+
     await User.create({
       username,
       password,
@@ -50,6 +56,15 @@ export async function loginUser(params: CreateUserParams) {
     if (!user) {
       throw new Error("User not found");
     }
+
+    if (!user.password) {
+      throw new Error("Password not found");
+    }
+
+    if (user.password !== password) {
+      throw new Error("Incorrect password");
+    }
+
     if (user.password === password) {
       cookies().set("token", JSON.stringify(user._id));
       return true;
