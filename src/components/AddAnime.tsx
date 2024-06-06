@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { addAnime } from "@/lib/actions/user.actions";
+import { addAnime, updateAnime } from "@/lib/actions/user.actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -55,7 +55,15 @@ const animeFormSchema = z.object({
     .max(100, { message: "Description is too long" }),
 });
 
-export function AddAnime({ userId }: { userId: string }) {
+export function AddAnime({
+  userId,
+  type = "create",
+  animeId,
+}: {
+  userId?: string | undefined;
+  type?: string;
+  animeId?: string | undefined;
+}) {
   const form = useForm<z.infer<typeof animeFormSchema>>({
     resolver: zodResolver(animeFormSchema),
     defaultValues: {
@@ -69,14 +77,26 @@ export function AddAnime({ userId }: { userId: string }) {
 
   async function onSubmit(values: z.infer<typeof animeFormSchema>) {
     try {
-      await addAnime({
-        userId,
-        animeName: values.animeName,
-        animeLink: values.animeLink,
-        animeStatus: values.animeStatus,
-        animeImage: values.animeImage,
-        description: values.description,
-      });
+      if (type === "create" && userId) {
+        await addAnime({
+          userId,
+          animeName: values.animeName,
+          animeLink: values.animeLink,
+          animeStatus: values.animeStatus,
+          animeImage: values.animeImage,
+          description: values.description,
+        });
+      }
+      if (type === "update" && animeId) {
+        await updateAnime({
+          animeName: values.animeName,
+          animeLink: values.animeLink,
+          animeStatus: values.animeStatus,
+          animeImage: values.animeImage,
+          description: values.description,
+          animeId,
+        });
+      }
     } catch (error) {
       console.log(error);
       throw error;
@@ -86,13 +106,17 @@ export function AddAnime({ userId }: { userId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="mt-8">Add Link</Button>
+        <Button className="mt-8">
+          {type === "create" ? "Add Link" : "Update"}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <DialogHeader>
-              <DialogTitle>Add Link</DialogTitle>
+              <DialogTitle>
+                {type === "create" ? "Add Details" : "Update Details"}
+              </DialogTitle>
               <DialogDescription>
                 Add Details and Link to your favourite anime{" "}
               </DialogDescription>

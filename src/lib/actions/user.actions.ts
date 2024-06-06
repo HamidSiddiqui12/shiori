@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import SavedAnime from "../../../database/savedAnime.model";
 import User, { IUser } from "../../../database/user.model";
@@ -103,6 +104,8 @@ export async function addAnime(params: CreateAnimeParams) {
     user.savedAnime.push(anime._id);
 
     await user.save();
+
+    revalidatePath("/");
   } catch (error) {
     console.log(error);
     throw error;
@@ -133,6 +136,52 @@ export async function deleteAnime(animeId: string) {
   try {
     await connectToDatabase();
     await SavedAnime.deleteOne({ _id: animeId });
+
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+// update
+
+interface UpdateAnimeParams {
+  animeId: string;
+  animeName: string;
+  animeLink: string;
+  animeStatus: string;
+  animeImage: string;
+  description: string;
+}
+
+export async function updateAnime(params: UpdateAnimeParams) {
+  try {
+    await connectToDatabase();
+    const {
+      animeName,
+      animeLink,
+      animeStatus,
+      animeImage,
+      description,
+      animeId,
+    } = params;
+
+    const anime = await SavedAnime.findByIdAndUpdate(animeId, {
+      animeName,
+      animeLink,
+      animeStatus,
+      animeImage,
+      description,
+    });
+
+    if (!anime) {
+      throw new Error("Anime not found");
+    }
+
+    revalidatePath("/");
+
+    return anime;
   } catch (error) {
     console.log(error);
     throw error;
