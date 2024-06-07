@@ -2,6 +2,7 @@
 import { logoutUser } from "@/lib/actions/user.actions";
 import Link from "next/link";
 import { UserInterface } from "../../../types";
+import { ModeToggle } from "../mode-toggle";
 import { Button } from "../ui/button";
 
 export const LoginRedirects = ({ user }: { user: UserInterface }) => {
@@ -18,13 +19,16 @@ export const LoginRedirects = ({ user }: { user: UserInterface }) => {
         </div>
       ) : (
         <div className="flex items-center justify-center">
-          <p className="text-xl font-bold ">
-            Welcome
-            <span className="mx-2 text-primary">
-              {user.username.toUpperCase()}
-            </span>
+          <div className="flex items-center gap-4 text-xl font-bold ">
+            <p>
+              Welcome
+              <span className="mx-2 text-primary">
+                {user.username.toUpperCase()}
+              </span>
+            </p>
             <Button onClick={async () => logoutUser()}>Logout</Button>
-          </p>
+            <ModeToggle />
+          </div>
         </div>
       )}
     </>
