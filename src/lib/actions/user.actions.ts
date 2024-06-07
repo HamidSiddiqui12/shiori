@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import SavedAnime from "../../../database/savedAnime.model";
 import User, { IUser } from "../../../database/user.model";
@@ -29,6 +30,12 @@ export async function createUser(params: CreateUserParams) {
     await connectToDatabase();
     const { username, password } = params;
 
+    const user = await User.findOne({ username });
+
+    if (user) {
+      throw new Error("User already exists");
+    }
+
     await User.create({
       username,
       password,
@@ -49,6 +56,15 @@ export async function loginUser(params: CreateUserParams) {
     if (!user) {
       throw new Error("User not found");
     }
+
+    if (!user.password) {
+      throw new Error("Password not found");
+    }
+
+    if (user.password !== password) {
+      throw new Error("Incorrect password");
+    }
+
     if (user.password === password) {
       cookies().set("token", JSON.stringify(user._id));
       return true;
@@ -103,6 +119,8 @@ export async function addAnime(params: CreateAnimeParams) {
     user.savedAnime.push(anime._id);
 
     await user.save();
+
+    revalidatePath("/");
   } catch (error) {
     console.log(error);
     throw error;
@@ -133,6 +151,52 @@ export async function deleteAnime(animeId: string) {
   try {
     await connectToDatabase();
     await SavedAnime.deleteOne({ _id: animeId });
+
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+// update
+
+interface UpdateAnimeParams {
+  animeId: string;
+  animeName: string;
+  animeLink: string;
+  animeStatus: string;
+  animeImage: string;
+  description: string;
+}
+
+export async function updateAnime(params: UpdateAnimeParams) {
+  try {
+    await connectToDatabase();
+    const {
+      animeName,
+      animeLink,
+      animeStatus,
+      animeImage,
+      description,
+      animeId,
+    } = params;
+
+    const anime = await SavedAnime.findByIdAndUpdate(animeId, {
+      animeName,
+      animeLink,
+      animeStatus,
+      animeImage,
+      description,
+    });
+
+    if (!anime) {
+      throw new Error("Anime not found");
+    }
+
+    revalidatePath("/");
+
+    return anime;
   } catch (error) {
     console.log(error);
     throw error;

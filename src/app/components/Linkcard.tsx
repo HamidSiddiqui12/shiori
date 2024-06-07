@@ -1,5 +1,6 @@
 "use client";
 
+import { AddAnime } from "@/components/AddAnime";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -63,9 +64,7 @@ const Linkcard = ({ data }: { data: string }) => {
             >
               Delete
             </Button>
-            <Button className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-              Edit
-            </Button>
+            <AddAnime type="update" animeId={data._id} />
           </CardFooter>
         </Card>
       ))}

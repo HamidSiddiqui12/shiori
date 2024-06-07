@@ -17,6 +17,8 @@ export async function connectToDatabase() {
     await mongoose.connect(process.env.MONGO_URL, {
       dbName: "shiori",
     });
+
+    isConnected = true;
   } catch (err) {
     console.log("err", err);
   }

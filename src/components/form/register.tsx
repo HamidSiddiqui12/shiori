@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import {
@@ -36,7 +37,6 @@ function Register({ type }: { type: "login" | "register" }) {
   const router = useRouter();
 
   const [error, setError] = useState<string | null>(null);
-  const [isSignUp, setisSignUp] = useState(false);
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
@@ -46,15 +46,13 @@ function Register({ type }: { type: "login" | "register" }) {
     },
   });
 
-  const toggleForm = () => {
-    setisSignUp((prev) => !prev);
-  };
-
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
     setError(null);
     if (type === "register") {
       try {
         await createUser(values);
+        toast("Account created successfully");
+        router.push("/login");
       } catch (error: any) {
         console.log(error);
         setError(error.message);
@@ -73,21 +71,25 @@ function Register({ type }: { type: "login" | "register" }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex min-h-[100dvh] items-center justify-center bg-gray-100 px-4 dark:bg-gray-950">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex min-h-dvh items-center justify-center bg-gray-100 px-4 dark:bg-gray-950">
           <Card className="w-full max-w-md">
             <CardHeader className="space-y-1 text-center">
-              <Link className="inline-flex items-center space-x-2" href="#">
+              <p className="inline-flex items-center space-x-2">
                 <span className="text-4xl font-bold">
                   Shi<span className="text-primary">ori</span>
                 </span>
-              </Link>
+              </p>
               <CardTitle className="text-2xl font-bold">
-                {isSignUp ? "Sign Up" : "Sign In"}
+                {/* {type ? "Sign Up" : "Sign In"} */}
+                {type === "register" ? "Sign Up" : "Sign In"}
               </CardTitle>
               <CardDescription>
                 {" "}
-                {isSignUp
+                {/* {type
+                  ? "Create an account to get started"
+                  : "Sign in to your account"} */}
+                {type === "register"
                   ? "Create an account to get started"
                   : "Sign in to your account"}
               </CardDescription>
@@ -119,29 +121,35 @@ function Register({ type }: { type: "login" | "register" }) {
                   </FormItem>
                 )}
               />
-
-              <CardFooter className="text-center">
-                <button
-                  onClick={toggleForm}
-                  className="text-indigo-500 hover:underline focus:outline-none"
-                >
-                  {isSignUp
-                    ? "Already have an account? Sign In"
-                    : "Don’t have an account? Sign Up"}
-                </button>
-              </CardFooter>
+              {error && (
+                <div className="my-4">
+                  <Alert variant="destructive">
+                    <AlertCircle className="size-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                </div>
+              )}
+              <div className="mt-6 text-sm">
+                {type === "register" ? (
+                  <Link href="/login">
+                    <span className="text-indigo-500 hover:underline focus:outline-none">
+                      Already have an account? Sign In
+                    </span>
+                  </Link>
+                ) : (
+                  <Link href="/sign-up">
+                    <span className="text-indigo-500 hover:underline focus:outline-none">
+                      Don’t have an account? Sign Up
+                    </span>
+                  </Link>
+                )}
+              </div>
             </CardContent>
 
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
             <CardFooter>
               <Button type="submit" className="w-full">
-                {isSignUp ? "Sign Up" : "Sign In"}
+                {type === "register" ? "Sign Up" : "Sign In"}
               </Button>
             </CardFooter>
           </Card>
