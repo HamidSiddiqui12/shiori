@@ -24,21 +24,22 @@ const Linkcard = ({ data }: { data: string }) => {
       {animeData.map((data: any) => (
         <Card
           key={data._id}
-          className="mx-auto max-w-sm overflow-hidden rounded-lg bg-white shadow-md"
+          className="mx-auto max-w-sm overflow-hidden rounded-lg bg-white shadow-md border border-gray-300"
         >
-          <CardHeader>
-            <CardTitle>{data.animeName}</CardTitle>
+          <CardHeader className="bg-gray-100 p-4">
+            <CardTitle className="text-lg font-semibold">
+              {data.animeName}
+            </CardTitle>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="p-4">
             <div className="mb-2 text-gray-700">
               <span className="font-semibold">Link: </span>
-              {/* <span>Watch Here</span> */}
               <Link
                 href={data.animeLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500"
+                className="text-blue-500 hover:underline"
               >
                 Watch Here
               </Link>
@@ -48,7 +49,7 @@ const Linkcard = ({ data }: { data: string }) => {
               <span>{data.animeStatus}</span>
             </div>
             <Image
-              className="h-48 w-full object-cover"
+              className="h-48 w-full object-cover rounded-t-md"
               src={data.animeImage}
               alt="Anime Image"
               width={500}
@@ -56,7 +57,7 @@ const Linkcard = ({ data }: { data: string }) => {
             />
           </CardContent>
 
-          <CardFooter className="flex justify-between">
+          <CardFooter className="flex justify-between bg-gray-100 p-4">
             <Button
               onClick={() => handleDelete(data._id)}
               className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
