@@ -1,3 +1,4 @@
+import Footer from "@/components/customs/footer";
 import { Header } from "@/components/customs/header";
 import { cookies } from "next/headers";
 import React from "react";
@@ -13,6 +14,7 @@ export default function HomeLayout({
     <main>
       <Header id={id} />
       {children}
+      <Footer />
     </main>
   );
 }

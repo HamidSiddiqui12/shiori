@@ -82,24 +82,18 @@ export async function logoutUser() {
 
 type CreateAnimeParams = {
   userId: string;
-  animeName: string;
-  animeLink: string;
-  animeStatus: string;
-  animeImage: string;
+  Name: string;
+  Link: string;
+  Type: string;
+  Status: string;
+  Image: string;
   description: string;
 };
 export async function addAnime(params: CreateAnimeParams) {
   try {
     await connectToDatabase();
 
-    const {
-      userId,
-      animeName,
-      animeLink,
-      animeStatus,
-      animeImage,
-      description,
-    } = params;
+    const { userId, Name, Link, Type, Status, Image, description } = params;
 
     const user: IUser | null = await User.findById(userId);
 
@@ -108,10 +102,11 @@ export async function addAnime(params: CreateAnimeParams) {
     }
 
     const anime = await SavedAnime.create({
-      animeName,
-      animeLink,
-      animeStatus,
-      animeImage,
+      Name,
+      Link,
+      Type,
+      Status,
+      Image,
       description,
       user: user._id,
     });
@@ -163,30 +158,25 @@ export async function deleteAnime(animeId: string) {
 
 interface UpdateAnimeParams {
   animeId: string;
-  animeName: string;
-  animeLink: string;
-  animeStatus: string;
-  animeImage: string;
+  Name: string;
+  Link: string;
+  Type: string;
+  Status: string;
+  Image: string;
   description: string;
 }
 
 export async function updateAnime(params: UpdateAnimeParams) {
   try {
     await connectToDatabase();
-    const {
-      animeName,
-      animeLink,
-      animeStatus,
-      animeImage,
-      description,
-      animeId,
-    } = params;
+    const { Name, Link, Type, Status, Image, description, animeId } = params;
 
     const anime = await SavedAnime.findByIdAndUpdate(animeId, {
-      animeName,
-      animeLink,
-      animeStatus,
-      animeImage,
+      Name,
+      Link,
+      Type,
+      Status,
+      Image,
       description,
     });
 

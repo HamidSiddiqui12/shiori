@@ -27,8 +27,8 @@ const Home = async () => {
           <h1 className="mb-4 text-4xl font-bold">
             Save, <span className="text-primary">Manage</span>, Visualize
           </h1>
-          <p className="text-xl">
-            Your Favorite Links in
+          <p className="text-xl pb-8">
+            Your Favorite Links in{" "}
             <span className="font-semibold">
               One Place<span className="text-primary">!</span>
             </span>
@@ -37,7 +37,7 @@ const Home = async () => {
         </div>
         <div className="">
           <Image
-            src={"/images/img1.jpg"}
+            src={"/images/img1.png"}
             alt="Hero-Img"
             width={500}
             height={500}

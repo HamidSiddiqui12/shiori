@@ -5,8 +5,6 @@ import Linkcard from "../../app/components/Linkcard";
 export async function Categories({ userId }: { userId: string }) {
   const savedAnime = await getSavedAnime(userId);
 
-  console.log(savedAnime);
-
   return (
     <div className="w-full p-6">
       <Tabs defaultValue="Anime" className="w-full">
@@ -17,20 +15,19 @@ export async function Categories({ userId }: { userId: string }) {
           >
             Anime
           </TabsTrigger>
-          {/* <TabsTrigger value="Manga" className="focus:font-semibold">
+          <TabsTrigger value="Manga" className="focus:font-semibold">
             Manga
           </TabsTrigger>
           <TabsTrigger value="Others" className="focus:font-semibold">
             Others
-          </TabsTrigger> */}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="Anime">
           <div>
             <Linkcard data={JSON.stringify(savedAnime)} />
           </div>
         </TabsContent>
-        {/* <TabsContent value="Manga">Man</TabsContent> */}
-        {/* <TabsContent value="Others">Other content here.</TabsContent> */}
+        <TabsContent value="Manga">Manga</TabsContent>
       </Tabs>
     </div>
   );

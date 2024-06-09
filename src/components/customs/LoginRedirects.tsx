@@ -18,11 +18,11 @@ export const LoginRedirects = ({ user }: { user: UserInterface }) => {
           </Link>
         </div>
       ) : (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-between cursor-pointer">
           <div className="flex items-center gap-4 text-xl font-bold ">
             <p>
               Welcome
-              <span className="mx-2 text-primary">
+              <span className="mx-2 text-primary underline decoration-primary">
                 {user.username.toUpperCase()}
               </span>
             </p>

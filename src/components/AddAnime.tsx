@@ -33,26 +33,24 @@ import {
 } from "./ui/select";
 
 const animeFormSchema = z.object({
-  animeName: z
+  Name: z
     .string()
     .min(1, { message: "Name is required" })
-    .max(100, { message: "Name is too long" }),
-  animeLink: z
+    .max(30, { message: "Name is too long" }),
+  Link: z
     .string()
     .min(1, { message: "Link is required" })
     .max(100, { message: "Link is too long" }),
-  animeStatus: z
-    .string()
-    .min(1, { message: "Status is required" })
-    .max(100, { message: "Status is too long" }),
-  animeImage: z
+  Type: z.string().min(1, { message: "Type is required" }),
+  Status: z.string().min(1, { message: "Status is required" }),
+  Image: z
     .string()
     .min(1, { message: "Image is required" })
     .max(100, { message: "Image is too long" }),
   description: z
     .string()
     .min(1, { message: "Description is required" })
-    .max(100, { message: "Description is too long" }),
+    .max(15, { message: "Description is too long" }),
 });
 
 export function AddAnime({
@@ -62,16 +60,17 @@ export function AddAnime({
 }: {
   userId?: string | undefined;
   type?: string;
-  animeId?: string | undefined;
+  animeId?: any | undefined;
 }) {
   const form = useForm<z.infer<typeof animeFormSchema>>({
     resolver: zodResolver(animeFormSchema),
     defaultValues: {
-      animeName: "",
-      animeLink: "",
-      animeStatus: "",
-      animeImage: "",
-      description: "",
+      Name: animeId?.Name ? animeId?.Name : "",
+      Link: animeId?.Link ? animeId?.Link : "",
+      Type: animeId?.Type ? animeId?.Type : "",
+      Status: animeId?.Status ? animeId?.Status : "",
+      Image: animeId?.Image ? animeId?.Image : "",
+      description: animeId?.description ? animeId?.description : "",
     },
   });
 
@@ -80,19 +79,21 @@ export function AddAnime({
       if (type === "create" && userId) {
         await addAnime({
           userId,
-          animeName: values.animeName,
-          animeLink: values.animeLink,
-          animeStatus: values.animeStatus,
-          animeImage: values.animeImage,
+          Name: values.Name,
+          Link: values.Link,
+          Type: values.Type,
+          Status: values.Status,
+          Image: values.Image,
           description: values.description,
         });
       }
       if (type === "update" && animeId) {
         await updateAnime({
-          animeName: values.animeName,
-          animeLink: values.animeLink,
-          animeStatus: values.animeStatus,
-          animeImage: values.animeImage,
+          Name: values.Name,
+          Link: values.Link,
+          Type: values.Type,
+          Status: values.Status,
+          Image: values.Image,
           description: values.description,
           animeId,
         });
@@ -106,9 +107,7 @@ export function AddAnime({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="mt-8">
-          {type === "create" ? "Add Link" : "Update"}
-        </Button>
+        <Button>{type === "create" ? "Add Link" : "Update"}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
@@ -124,7 +123,7 @@ export function AddAnime({
 
             <FormField
               control={form.control}
-              name="animeName"
+              name="Name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
@@ -138,7 +137,7 @@ export function AddAnime({
             />
             <FormField
               control={form.control}
-              name="animeLink"
+              name="Link"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Link</FormLabel>
@@ -153,7 +152,33 @@ export function AddAnime({
 
             <FormField
               control={form.control}
-              name="animeStatus"
+              name="Type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Type</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select the Type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Anime">Anime</SelectItem>
+                      <SelectItem value="Manga">Manga</SelectItem>
+                      <SelectItem value="Others">Others</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="Status"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
@@ -167,9 +192,12 @@ export function AddAnime({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="watching">Watching</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
-                      <SelectItem value="planning">Plan to watch</SelectItem>
+                      <SelectItem value="Ongoing">Watching/Reading</SelectItem>
+                      <SelectItem value="Reading"></SelectItem>
+                      <SelectItem value="Completed">Completed</SelectItem>
+                      <SelectItem value="Planning">
+                        Plan to watch/read
+                      </SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -180,7 +208,7 @@ export function AddAnime({
 
             <FormField
               control={form.control}
-              name="animeImage"
+              name="Image"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Cover Image</FormLabel>
