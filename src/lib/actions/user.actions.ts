@@ -1,8 +1,7 @@
 "use server";
-
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import SavedAnime from "../../../database/savedAnime.model";
+import Saved from "../../../database/saved.model";
 import User, { IUser } from "../../../database/user.model";
 import { UserInterface } from "../../../types";
 import { connectToDatabase } from "../mongoose";
@@ -82,18 +81,18 @@ export async function logoutUser() {
 
 type CreateAnimeParams = {
   userId: string;
-  Name: string;
-  Link: string;
-  Type: string;
-  Status: string;
-  Image: string;
+  name: string;
+  link: string;
+  type: string;
+  status: string;
+  cover: string;
   description: string;
 };
 export async function addAnime(params: CreateAnimeParams) {
   try {
     await connectToDatabase();
 
-    const { userId, Name, Link, Type, Status, Image, description } = params;
+    const { userId, name, link, type, status, cover, description } = params;
 
     const user: IUser | null = await User.findById(userId);
 
@@ -101,19 +100,22 @@ export async function addAnime(params: CreateAnimeParams) {
       throw new Error("User not found");
     }
 
-    const anime = await SavedAnime.create({
-      Name,
-      Link,
-      Type,
-      Status,
-      Image,
+    const saved = await Saved.create({
+      name,
+      link,
+      type,
+      status,
+      cover,
       description,
-      user: user._id,
     });
 
-    user.savedAnime.push(anime._id);
-
-    await user.save();
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: { saved: saved._id },
+      },
+      { new: true }
+    );
 
     revalidatePath("/");
   } catch (error) {
@@ -127,25 +129,49 @@ export async function getSavedAnime(userId: string) {
     await connectToDatabase();
 
     const user: IUser | null = await User.findById(userId).populate({
-      path: "savedAnime",
-      model: "SavedAnime",
+      path: "saved",
+      model: "Saved",
     });
 
     if (!user) {
       throw new Error("User not found");
     }
 
-    return user.savedAnime;
+    const saved = user.saved.filter((saved: any) => saved.type === "anime");
+
+    return saved;
   } catch (error) {
     console.log(error);
     throw error;
   }
 }
 
-export async function deleteAnime(animeId: string) {
+export async function getSavedManga(userId: string) {
   try {
     await connectToDatabase();
-    await SavedAnime.deleteOne({ _id: animeId });
+
+    const user: IUser | null = await User.findById(userId).populate({
+      path: "saved",
+      model: "Saved",
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const saved = user.saved.filter((saved: any) => saved.type === "manga");
+
+    return saved;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteSeries(id: string) {
+  try {
+    await connectToDatabase();
+    await Saved.deleteOne({ _id: id });
 
     revalidatePath("/");
   } catch (error) {
@@ -157,36 +183,27 @@ export async function deleteAnime(animeId: string) {
 // update
 
 interface UpdateAnimeParams {
-  animeId: string;
-  Name: string;
-  Link: string;
-  Type: string;
-  Status: string;
-  Image: string;
+  name: string;
+  link: string;
+  type: string;
+  status: string;
+  cover: string;
   description: string;
+  id: string;
 }
 
 export async function updateAnime(params: UpdateAnimeParams) {
   try {
     await connectToDatabase();
-    const { Name, Link, Type, Status, Image, description, animeId } = params;
 
-    const anime = await SavedAnime.findByIdAndUpdate(animeId, {
-      Name,
-      Link,
-      Type,
-      Status,
-      Image,
-      description,
-    });
+    const { name, link, type, status, cover, description, id } = params;
 
-    if (!anime) {
-      throw new Error("Anime not found");
-    }
+    await Saved.updateOne(
+      { _id: id },
+      { name, link, type, status, cover, description }
+    );
 
     revalidatePath("/");
-
-    return anime;
   } catch (error) {
     console.log(error);
     throw error;

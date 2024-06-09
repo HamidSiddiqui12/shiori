@@ -1,9 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getSavedAnime } from "@/lib/actions/user.actions";
+import { getSavedAnime, getSavedManga } from "@/lib/actions/user.actions";
 import Linkcard from "../../app/components/Linkcard";
 
 export async function Categories({ userId }: { userId: string }) {
   const savedAnime = await getSavedAnime(userId);
+  const savedManga = await getSavedManga(userId);
 
   return (
     <div className="w-full p-6">
@@ -27,7 +28,11 @@ export async function Categories({ userId }: { userId: string }) {
             <Linkcard data={JSON.stringify(savedAnime)} />
           </div>
         </TabsContent>
-        <TabsContent value="Manga">Manga</TabsContent>
+        <TabsContent value="Manga">
+          <div>
+            <Linkcard data={JSON.stringify(savedManga)} />
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );

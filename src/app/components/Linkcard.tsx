@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { deleteAnime } from "@/lib/actions/user.actions";
+import { deleteSeries } from "@/lib/actions/user.actions";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,19 +17,19 @@ const Linkcard = ({ data }: { data: string }) => {
   const animeData = JSON.parse(data);
 
   const handleDelete = async (id: string) => {
-    await deleteAnime(id);
+    await deleteSeries(id);
   };
 
   return (
-    <div className="container w-full grid grid-cols-3 gap-1 py-10">
+    <div className="container grid w-full grid-cols-3 gap-1 py-10">
       {animeData.map((data: any) => (
         <Card
           key={data._id}
-          className="mx-auto overflow-hidden rounded-lg bg-background shadow-md border border-white-100 w-full"
+          className=" mx-auto w-full overflow-hidden rounded-lg border bg-background shadow-md"
         >
           <CardHeader className="bg-background p-4">
-            <CardTitle className="text-lg font-semibold border-b border-white-100">
-              {data.Name}
+            <CardTitle className=" border-b text-lg font-semibold">
+              {data.name}
             </CardTitle>
           </CardHeader>
 
@@ -37,7 +37,7 @@ const Linkcard = ({ data }: { data: string }) => {
             <div className="mb-2 text-gray-700">
               <span className="font-semibold">Link: </span>
               <Link
-                href={data.Link}
+                href={data.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-500 hover:underline"
@@ -47,22 +47,22 @@ const Linkcard = ({ data }: { data: string }) => {
             </div>
             <div className="mb-2 text-gray-700">
               <span className="font-semibold">Type: </span>
-              <span>{data.Type}</span>
+              <span>{data.type}</span>
             </div>
             <div className="mb-2 text-gray-700">
               <span className="font-semibold">Status: </span>
-              <span>{data.Status}</span>
+              <span>{data.status}</span>
             </div>
             <Image
-              className="h-48 w-full object-contain rounded-t-md"
-              src={data.Image}
+              className="h-48 w-full rounded-t-md object-contain"
+              src={data.cover}
               alt="Image"
               width={500}
               height={500}
             />
           </CardContent>
 
-          <CardFooter className="flex justify-between items-center  bg-background p-4 border-t border-white-100">
+          <CardFooter className=" flex items-center  justify-between border-t bg-background p-4">
             <Button
               onClick={() => handleDelete(data._id)}
               className="rounded bg-red-500 px-4 py-2 hover:bg-red-600"

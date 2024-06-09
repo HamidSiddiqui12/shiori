@@ -1,9 +1,9 @@
 import { AddAnime } from "@/components/AddAnime";
+import { Categories } from "@/components/customs/Categories";
 import { getUserById } from "@/lib/actions/user.actions";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { Categories } from "../../components/customs/Categories";
 
 const Home = async () => {
   const id = cookies().get("token")?.value || null;
@@ -27,7 +27,7 @@ const Home = async () => {
           <h1 className="mb-4 text-4xl font-bold">
             Save, <span className="text-primary">Manage</span>, Visualize
           </h1>
-          <p className="text-xl pb-8">
+          <p className="pb-8 text-xl">
             Your Favorite Links in{" "}
             <span className="font-semibold">
               One Place<span className="text-primary">!</span>
