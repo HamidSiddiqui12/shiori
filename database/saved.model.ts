@@ -1,44 +1,52 @@
 import { Document, Schema, model, models } from "mongoose";
 
-export interface ISavedAnime extends Document {
+export interface ISaved extends Document {
   description: string;
-  animeImage: string;
-  animeName: string;
-  animeLink: string;
-  animeStatus: string;
+  cover: string;
+  name: string;
+  link: string;
+  status: string;
+  type: "anime" | "manga";
   user: Schema.Types.ObjectId;
 }
 
-export const SavedAnimeSchema = new Schema<ISavedAnime>({
+export const SavedAnimeSchema = new Schema<ISaved>({
   description: {
     type: String,
     required: true,
   },
 
-  animeImage: {
+  cover: {
     type: String,
     required: true,
   },
-  animeName: {
+
+  name: {
     type: String,
     required: true,
   },
-  animeLink: {
+
+  link: {
     type: String,
     required: true,
   },
-  animeStatus: {
+
+  status: {
     type: String,
     required: true,
   },
+
+  type: {
+    type: String,
+    required: true,
+  },
+
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    required: true,
   },
 });
 
-const SavedAnime =
-  models?.SavedAnime || model<ISavedAnime>("SavedAnime", SavedAnimeSchema);
+const Saved = models?.Saved || model<ISaved>("Saved", SavedAnimeSchema);
 
-export default SavedAnime;
+export default Saved;

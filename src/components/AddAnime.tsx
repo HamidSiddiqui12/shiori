@@ -33,17 +33,17 @@ import {
 } from "./ui/select";
 
 const animeFormSchema = z.object({
-  Name: z
+  name: z
     .string()
     .min(1, { message: "Name is required" })
     .max(30, { message: "Name is too long" }),
-  Link: z
+  link: z
     .string()
     .min(1, { message: "Link is required" })
     .max(100, { message: "Link is too long" }),
-  Type: z.string().min(1, { message: "Type is required" }),
-  Status: z.string().min(1, { message: "Status is required" }),
-  Image: z
+  type: z.string().min(1, { message: "Type is required" }),
+  status: z.string().min(1, { message: "Status is required" }),
+  cover: z
     .string()
     .min(1, { message: "Image is required" })
     .max(100, { message: "Image is too long" }),
@@ -65,12 +65,12 @@ export function AddAnime({
   const form = useForm<z.infer<typeof animeFormSchema>>({
     resolver: zodResolver(animeFormSchema),
     defaultValues: {
-      Name: animeId?.Name ? animeId?.Name : "",
-      Link: animeId?.Link ? animeId?.Link : "",
-      Type: animeId?.Type ? animeId?.Type : "",
-      Status: animeId?.Status ? animeId?.Status : "",
-      Image: animeId?.Image ? animeId?.Image : "",
-      description: animeId?.description ? animeId?.description : "",
+      name: animeId ? animeId.name : "",
+      link: animeId ? animeId.link : "",
+      type: animeId ? animeId.type : "",
+      status: animeId ? animeId.status : "",
+      cover: animeId ? animeId.cover : "",
+      description: animeId ? animeId.description : "",
     },
   });
 
@@ -79,23 +79,23 @@ export function AddAnime({
       if (type === "create" && userId) {
         await addAnime({
           userId,
-          Name: values.Name,
-          Link: values.Link,
-          Type: values.Type,
-          Status: values.Status,
-          Image: values.Image,
+          name: values.name,
+          link: values.link,
+          type: values.type,
+          status: values.status,
+          cover: values.cover,
           description: values.description,
         });
       }
       if (type === "update" && animeId) {
         await updateAnime({
-          Name: values.Name,
-          Link: values.Link,
-          Type: values.Type,
-          Status: values.Status,
-          Image: values.Image,
+          name: values.name,
+          link: values.link,
+          type: values.type,
+          status: values.status,
+          cover: values.cover,
           description: values.description,
-          animeId,
+          id: animeId._id,
         });
       }
     } catch (error) {
@@ -120,131 +120,133 @@ export function AddAnime({
                 Add Details and Link to your favourite anime{" "}
               </DialogDescription>
             </DialogHeader>
-
-            <FormField
-              control={form.control}
-              name="Name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="xyz" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="Link"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Link</FormLabel>
-                  <FormControl>
-                    <Input placeholder="http://xyz.com" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="Type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+            <div className="flex gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select the Type" />
-                      </SelectTrigger>
+                      <Input placeholder="xyz" {...field} />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Anime">Anime</SelectItem>
-                      <SelectItem value="Manga">Manga</SelectItem>
-                      <SelectItem value="Others">Others</SelectItem>
-                    </SelectContent>
-                  </Select>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="Status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="link"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Link</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select the anime status" />
-                      </SelectTrigger>
+                      <Input placeholder="http://xyz.com" {...field} />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Ongoing">Watching/Reading</SelectItem>
-                      <SelectItem value="Reading"></SelectItem>
-                      <SelectItem value="Completed">Completed</SelectItem>
-                      <SelectItem value="Planning">
-                        Plan to watch/read
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Type</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select the Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="anime">Anime</SelectItem>
+                        <SelectItem value="manga">Manga</SelectItem>
+                        {/* <SelectItem value="Others">Others</SelectItem> */}
+                      </SelectContent>
+                    </Select>
 
-            <FormField
-              control={form.control}
-              name="Image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cover Image</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://image.com" {...field} />
-                  </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select the anime status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="ongoing">
+                          Watching/Reading
+                        </SelectItem>
+                        <SelectItem value="completed">Completed</SelectItem>
+                        <SelectItem value="planning">
+                          Plan to watch/read
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>description</FormLabel>
-                  <FormControl>
-                    <Input placeholder="xyz" {...field} />
-                  </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex gap-4">
+              <FormField
+                control={form.control}
+                name="cover"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cover Image</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://image.com" {...field} />
+                    </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>description</FormLabel>
+                    <FormControl>
+                      <Input placeholder="xyz" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <DialogFooter>
               {form.formState.isValid ? (
                 <DialogClose>
                   <Button type="submit">Save changes</Button>
                 </DialogClose>
               ) : (
-                <Button disabled type="submit">
-                  Save changes
-                </Button>
+                <Button type="submit">Save changes</Button>
               )}
             </DialogFooter>
           </form>

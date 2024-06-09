@@ -3,7 +3,7 @@ import { Document, Schema, model, models } from "mongoose";
 export interface IUser extends Document {
   username: string;
   password: string;
-  savedAnime: Schema.Types.ObjectId[];
+  saved: Schema.Types.ObjectId[];
 }
 
 export const UserSchema = new Schema<IUser>({
@@ -16,10 +16,10 @@ export const UserSchema = new Schema<IUser>({
     type: String,
     required: true,
   },
-  savedAnime: [
+  saved: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Savedanime",
+      ref: "Saved",
     },
   ],
 });
