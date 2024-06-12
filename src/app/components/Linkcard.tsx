@@ -21,14 +21,14 @@ const Linkcard = ({ data }: { data: string }) => {
   };
 
   return (
-    <div className="container grid w-full grid-cols-3 gap-1 py-10">
+    <div className="container mx-auto grid w-full grid-cols-1 gap-4 py-10 sm:grid-cols-2 md:grid-cols-3">
       {animeData.map((data: any) => (
         <Card
           key={data._id}
-          className=" mx-auto w-full overflow-hidden rounded-lg border bg-background shadow-md"
+          className="mx-auto w-full overflow-hidden rounded-lg border bg-background shadow-md"
         >
           <CardHeader className="bg-background p-4">
-            <CardTitle className=" border-b text-lg font-semibold">
+            <CardTitle className="border-b text-base sm:text-lg font-semibold">
               {data.name}
             </CardTitle>
           </CardHeader>
@@ -62,7 +62,7 @@ const Linkcard = ({ data }: { data: string }) => {
             />
           </CardContent>
 
-          <CardFooter className=" flex items-center  justify-between border-t bg-background p-4">
+          <CardFooter className="flex items-center justify-between border-t bg-background p-4">
             <Button
               onClick={() => handleDelete(data._id)}
               className="rounded bg-red-500 px-4 py-2 hover:bg-red-600"

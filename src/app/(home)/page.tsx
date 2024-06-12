@@ -24,10 +24,10 @@ const Home = async () => {
     <>
       <section className="container flex items-center justify-between">
         <div className="text-left">
-          <h1 className="mb-4 text-4xl font-bold">
+          <h1 className="mb-4 sm:text-4xl font-bold">
             Save, <span className="text-primary">Manage</span>, Visualize
           </h1>
-          <p className="pb-8 text-xl">
+          <p className="pb-8 sm:text-xl">
             Your Favorite Links in{" "}
             <span className="font-semibold">
               One Place<span className="text-primary">!</span>
@@ -35,7 +35,7 @@ const Home = async () => {
           </p>
           <AddAnime userId={user?._id.toString()} />
         </div>
-        <div className="">
+        <div>
           <Image
             src={"/images/img1.png"}
             alt="Hero-Img"

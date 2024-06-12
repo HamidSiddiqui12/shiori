@@ -19,7 +19,7 @@ export const LoginRedirects = ({ user }: { user: UserInterface }) => {
         </div>
       ) : (
         <div className="flex items-center justify-between cursor-pointer">
-          <div className="flex items-center gap-4 text-xl font-bold ">
+          <div className="flex items-center gap-4 text-l sm:text-xl font-bold">
             <p>
               Welcome
               <span className="mx-2 text-primary underline decoration-primary">
