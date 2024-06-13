@@ -5,8 +5,4 @@
     "plugin:tailwindcss/recommended",
     "prettier"
   ]
-  ,
-  "plugins": [
-    "react"
-  ]
 }
