@@ -115,7 +115,11 @@ function Register({ type }: { type: "login" | "register" }) {
                   <FormItem>
                     <FormLabel>password</FormLabel>
                     <FormControl>
-                      <Input placeholder="password" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
