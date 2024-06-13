@@ -18,8 +18,6 @@ const Home = async () => {
     redirect("/login");
   }
 
-  console.log(user);
-
   return (
     <>
       <section className="container flex items-center justify-between">
@@ -33,7 +31,7 @@ const Home = async () => {
               One Place<span className="text-primary">!</span>
             </span>
           </p>
-          <AddAnime userId={user?._id.toString()} />
+          <AddAnime userId={JSON.parse(JSON.stringify(user._id))} />
         </div>
         <div>
           <Image
@@ -44,7 +42,7 @@ const Home = async () => {
           ></Image>
         </div>
       </section>
-      <Categories userId={user?._id.toString()} />
+      <Categories userId={JSON.parse(JSON.stringify(user._id))} />
     </>
   );
 };

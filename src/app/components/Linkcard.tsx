@@ -54,7 +54,7 @@ const Linkcard = ({ data }: { data: string }) => {
               <span>{data.status}</span>
             </div>
             <Image
-              className="h-48 w-full rounded-t-md object-contain"
+              className=" rounded-t-md object-contain"
               src={data.cover}
               alt="Image"
               width={500}
